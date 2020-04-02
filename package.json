@@ -1,6 +1,6 @@
 {
-  "name": "TODO",
-  "description": "TODO",
+  "name": "chabu",
+  "description": "Online homework asking forum",
   "version": "0.0.1",
   "scripts": {
     "dev": "sapper dev",
