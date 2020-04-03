@@ -19,6 +19,31 @@ jobs:
         node-version: [10.x, 12.x]
 
     steps:
+    - continue-on-error: true
+
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - run: npm ci
+    - run: npm run build --if-present
+    - run: npm test
+
+    - name: Return
+      id: return
+      if: always()
+      run: |
+        echo ::set-output success::${{ success() }}
+    
+    env:
+      CI: true
+      
+  notify:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
     - name: Setup
       id: setup
       if: always()
@@ -59,24 +84,15 @@ jobs:
           name=event_url::$issue_url \
           name=event_title::$event_title 
 
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v1
-      with:
-        node-version: ${{ matrix.node-version }}
-    - run: npm ci
-    - run: npm run build --if-present
-    - run: npm test
-    
-    - name: Notify on PR success
+    - name: Notify on PR/push success
       uses: appleboy/telegram-action@master
-      if: success()
+      if: jobs.build.steps.return.outputs.success
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         format: markdown
         message: |
-          \* PR #${{ steps.setup.outputs.event_number }} SUCCESS
+          * PR #${{ steps.setup.outputs.event_number }} SUCCESS *
           ✅✅✅ Ò good job broo 😍
           On branch/commit `${{ github.ref }}` by ${{ github.actor }}
           Tested against Node.js ${{ matrix.node-version }}
@@ -84,21 +100,18 @@ jobs:
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/love-telegram.gif
 
-    - name: Notify on PR failure
+    - name: Notify on PR/push failure
       uses: appleboy/telegram-action@master
-      if: failure()
+      if: !jobs.build.steps.return.outputs.success
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         format: markdown
         message: |
-          \* PR #${{ steps.setup.outputs.event_number }} FLOPPED
+          * PR #${{ steps.setup.outputs.event_number }} FLOPPED *
           ❗️❗️❗️ Bruh what have u doneeee?
           On branch/commit `${{ github.ref }}` by ${{ github.actor }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Tested against Node.js ${{ matrix.node-version }}
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/bruh-telegram.gif
-      
-    env:
-      CI: true
