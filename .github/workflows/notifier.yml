@@ -46,7 +46,7 @@ jobs:
           && event_url="$base_url/pr/$event_number"
         ! [[ $event_url ]] && event_url="$base_url/issues/$event_number"
 
-        event_sha=${echo ${{ github.sha }} | cut -c 1-8 }
+        event_sha=$(echo ${{ github.sha }} | cut -c 1-8)
 
         event_title="${{ github.event.issue.title }}"
         case "${{ github.event.issue.title }}" in
