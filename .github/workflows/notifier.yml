@@ -1,0 +1,115 @@
+name: Notifier
+
+# triggers for notifying
+#  these are some important trigger cases could be change as need
+# check here https://developer.github.com/webhooks/
+on:
+  issues:
+    types: [ assigned ]
+  pull_request:
+    branches: [ master ]
+    types: [ assigned, ready_for_review, review_requested ]
+  push:
+    branches: [ master ]
+
+jobs:
+  build:
+    name: Notifier
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Setup
+      id: setup
+      if: always()
+      run: |
+        event="UNSPECIFIED"
+        event_alt="unspecified"
+
+        event_match=false
+        case "${{ github.event }}" in
+          "pull_request") 
+            event="PR"
+            event_alt="PR"
+            event_match=true
+            ;;
+          "issues") 
+            event="ISSUE" 
+            event_alt="issue"
+            event_match=true
+            ;;
+        esac
+
+        base_url="https://github.com/${{ github.repository }}"
+        event_number=$(echo ${{ github.ref }} | sed 's,.*/\([0-9]*\)/.*,\1,')
+        ! [[ $pr =~ '^[0-9]+$']] \
+          && event_number=${{ github.event.issue.number }} \
+          && event_url="$base_url/pr/$event_number"
+        ! [[ event_url ]] && event_url="$base_url/issues/$event_number"
+
+        event_title="${{ github.event.issue.title }}"
+        case "${{ github.event.issue.title }}" in
+          "") event_title="${{ github.event.pull_request.title }}" ;;
+        esac
+
+        echo ::set-output \
+          name=event::$event \
+          name=event_alt::$event_alt \
+          name=event_match::$event_match \
+          name=event_number::$event_number \
+          name=event_url::$issue_url \
+          name=event_title::$event_title 
+
+    - name: Notify on review request
+      uses: appleboy/telegram-action@master
+      if: always() && github.event_name == 'review_requested'
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |
+          *** PR REVIEW REQUESTED
+          cc @${{ github.actor }}
+          Please review this PR: [#${{ steps.setup.outputs.event_number }}](${{ steps.setup.outputs.event_url }})
+          Skip this message if you have reviewed this issue/PR.
+
+    - name: Notify on assigned
+      uses: appleboy/telegram-action@master
+      if: always() && github.event_name == 'assigned'
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |
+          *** ${{ steps.setup.outputs.event }}: ${{ steps.setup.outputs.event_title }}
+          Assigned [${{ steps.setup.outputs.event_alt }} #${{ steps.setup.outputs.event_number }}](${{ steps.setup.outputs.event_url }}) to @${{ github.actor }}
+          Skip this message if you have resolved this ${{ steps.setup.outputs.event_alt }}.
+
+    - name: Notify on PR success
+      uses: appleboy/telegram-action@master
+      if: always() && steps.setup.outputs.event_match && job.status == 'success'
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |
+          *** PR #${{ steps.setup.outputs.event_number }} SUCCESS
+          ✅✅✅ Ò good job broo 😍
+          On branch `${{ github.ref }}` by ${{ github.actor }}
+          SHA: `${{ github.sha.substr(0, 7) }}`
+          Check here for more [detail](${{ steps.setup.outputs.event_url }})
+        document: ./res/gifs/love-telegram.gif
+
+    - name: Notify on PR failure
+      uses: appleboy/telegram-action@master
+      if: always() && steps.setup.outputs.event_match && job.status == 'failure'
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |
+          *** PR #${{ steps.setup.outputs.event_number }} FLOPPED
+          ❗️❗️❗️ Bruh what have u doneeee?
+          On branch `${{ github.ref }}` by ${{ github.actor }}
+          SHA: `${{ github.sha.substr(0, 7) }}`
+          Check here for more [detail](${{ steps.setup.outputs.event_url }})
+        document: ./res/gifs/bruh-telegram.gif
