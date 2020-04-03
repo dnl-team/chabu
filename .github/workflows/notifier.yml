@@ -9,8 +9,6 @@ on:
   pull_request:
     branches: [ master ]
     types: [ assigned, ready_for_review, review_requested ]
-  push:
-    branches: [ master ]
 
 jobs:
   build:
@@ -86,33 +84,3 @@ jobs:
           *** ${{ steps.setup.outputs.event }}: ${{ steps.setup.outputs.event_title }}
           Assigned [${{ steps.setup.outputs.event_alt }} #${{ steps.setup.outputs.event_number }}](${{ steps.setup.outputs.event_url }}) to @${{ github.actor }}
           Skip this message if you have resolved this ${{ steps.setup.outputs.event_alt }}.
-
-    - name: Notify on PR success
-      uses: appleboy/telegram-action@master
-      if: always() && steps.setup.outputs.event_match && job.status == 'success'
-      with:
-        to: ${{ secrets.TELEGRAM_TO }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        format: markdown
-        message: |
-          *** PR #${{ steps.setup.outputs.event_number }} SUCCESS
-          ✅✅✅ Ò good job broo 😍
-          On branch `${{ github.ref }}` by ${{ github.actor }}
-          SHA: `${{ steps.setup.outputs.event_sha }}`
-          Check here for more [detail](${{ steps.setup.outputs.event_url }})
-        document: ./res/gifs/love-telegram.gif
-
-    - name: Notify on PR failure
-      uses: appleboy/telegram-action@master
-      if: always() && steps.setup.outputs.event_match && job.status == 'failure'
-      with:
-        to: ${{ secrets.TELEGRAM_TO }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        format: markdown
-        message: |
-          *** PR #${{ steps.setup.outputs.event_number }} FLOPPED
-          ❗️❗️❗️ Bruh what have u doneeee?
-          On branch `${{ github.ref }}` by ${{ github.actor }}
-          SHA: `${{ steps.setup.outputs.event_sha }}`
-          Check here for more [detail](${{ steps.setup.outputs.event_url }})
-        document: ./res/gifs/bruh-telegram.gif
