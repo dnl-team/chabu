@@ -52,12 +52,18 @@ jobs:
         esac
 
         echo ::set-output \
-          name=event::$event \
-          name=event_alt::$event_alt \
-          name=event_match::$event_match \
-          name=event_number::$event_number \
-          name=event_sha::$event_sha \
-          name=event_url::$issue_url \
+          name=event::$event 
+        echo ::set-output \
+          name=event_alt::$event_alt
+        echo ::set-output \
+          name=event_match::$event_match
+        echo ::set-output \
+          name=event_number::$event_number
+        echo ::set-output \
+          name=event_sha::$event_sha
+        echo ::set-output \
+          name=event_url::$issue_url
+        echo ::set-output \
           name=event_title::$event_title 
 
     - name: Notify on review request
