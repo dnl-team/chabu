@@ -34,12 +34,13 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
         message: |
           Ò good job broo 😍
           At [${{ github.workspace }}](https://github.com/${{ github.workspace }})
           On branch `${{ github.ref }}`
           SHA: `${{ github.sha }}`
-        photo: https://tenor.com/view/camlansuc-cls-kisses-flying-kiss-smile-gif-13263229
+        photo: ./res/gifs/love-telegram.gif
 
     - name: send bruh message
       if: failure()
@@ -47,12 +48,13 @@ jobs:
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
         message: |
           Bruh what have u doneeee?
           At [${{ github.workspace }}](https://github.com/${{ github.workspace }})
           On branch `${{ github.ref }}`
           SHA: `${{ github.sha }}`
-        photo: https://tenor.com/view/camlansuc-12345-cls-linda-count-gif-13238517
+        photo: ./res/gifs/bruh-telegram.gif
 
       env:
         CI: true
