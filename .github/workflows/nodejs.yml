@@ -79,7 +79,7 @@ jobs:
           *** PR #${{ steps.setup.outputs.event_number }} SUCCESS
           ✅✅✅ Ò good job broo 😍
           On branch/commit `${{ github.ref }}` by ${{ github.actor }}
-          Tested against ${{ matrix.node-version }}
+          Tested against Node.js ${{ matrix.node-version }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/love-telegram.gif
@@ -96,7 +96,7 @@ jobs:
           ❗️❗️❗️ Bruh what have u doneeee?
           On branch/commit `${{ github.ref }}` by ${{ github.actor }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
-          Tested against ${{ matrix.node-version }}
+          Tested against Node.js ${{ matrix.node-version }}
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/bruh-telegram.gif
       
