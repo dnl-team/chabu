@@ -2,6 +2,8 @@ import dotenv from 'dotenv';
 import resolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
 import commonjs from '@rollup/plugin-commonjs';
+import builtins from '@erquhart/rollup-plugin-node-builtins';
+import json from '@rollup/plugin-json';
 import svelte from 'rollup-plugin-svelte';
 import babel from 'rollup-plugin-babel';
 import { terser } from 'rollup-plugin-terser';
@@ -96,6 +98,8 @@ export default {
 		input: config.serviceworker.input(),
 		output: config.serviceworker.output(),
 		plugins: [
+			json(),
+			builtins({crypto: false}),
 			resolve(),
 			replace({
 				'process.browser': true,
