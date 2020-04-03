@@ -41,7 +41,7 @@ jobs:
           On branch `${{ github.ref }}`
           Tested agaist Node.js ${{ matrix.node-version }}
           SHA: `${{ github.sha }}`
-        video: ./res/gifs/love-telegram.gif
+        document: ./res/gifs/love-telegram.gif
 
     - name: send bruh message
       if: failure()
@@ -56,7 +56,7 @@ jobs:
           On branch `${{ github.ref }}`
           Tested agaist Node.js ${{ matrix.node-version }}
           SHA: `${{ github.sha }}`
-        video: ./res/gifs/bruh-telegram.gif
+        document: ./res/gifs/bruh-telegram.gif
 
       env:
         CI: true
