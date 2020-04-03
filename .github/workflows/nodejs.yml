@@ -27,5 +27,32 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+
+    - name: send love message
+      if: success()
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          Ò good job broo 😍
+          At [${{ github.workspace }}](https://github.com/${{ github.workspace }})
+          On branch `${{ github.ref }}`
+          SHA: `${{ github.sha }}`
+        photo: https://tenor.com/view/camlansuc-cls-kisses-flying-kiss-smile-gif-13263229
+
+    - name: send bruh message
+      if: failed()
+      uses: appleboy/telegram-action@master
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        message: |
+          Bruh what have u doneeee?
+          At [${{ github.workspace }}](https://github.com/${{ github.workspace }})
+          On branch `${{ github.ref }}`
+          SHA: `${{ github.sha }}`
+        photo: https://tenor.com/view/camlansuc-12345-cls-linda-count-gif-13238517
+
       env:
         CI: true
