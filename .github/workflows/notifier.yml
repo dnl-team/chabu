@@ -52,18 +52,12 @@ jobs:
         esac
 
         echo ::set-output \
-          name=event::$event 
-        echo ::set-output \
-          name=event_alt::$event_alt
-        echo ::set-output \
-          name=event_match::$event_match
-        echo ::set-output \
-          name=event_number::$event_number
-        echo ::set-output \
-          name=event_sha::$event_sha
-        echo ::set-output \
-          name=event_url::$issue_url
-        echo ::set-output \
+          name=event::$event \
+          name=event_alt::$event_alt \
+          name=event_match::$event_match \
+          name=event_number::$event_number \
+          name=event_sha::$event_sha \
+          name=event_url::$issue_url \
           name=event_title::$event_title 
 
     - name: Notify on review request
@@ -74,7 +68,7 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         format: markdown
         message: |
-          *** PR REVIEW REQUESTED
+          \* PR REVIEW REQUESTED
           cc @${{ github.actor }}
           Please review this PR: [#${{ steps.setup.outputs.event_number }}](${{ steps.setup.outputs.event_url }})
           Skip this message if you have reviewed this issue/PR.
@@ -87,6 +81,6 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         format: markdown
         message: |
-          *** ${{ steps.setup.outputs.event }}: ${{ steps.setup.outputs.event_title }}
+          \* ${{ steps.setup.outputs.event }}: ${{ steps.setup.outputs.event_title }}
           Assigned [${{ steps.setup.outputs.event_alt }} #${{ steps.setup.outputs.event_number }}](${{ steps.setup.outputs.event_url }}) to @${{ github.actor }}
           Skip this message if you have resolved this ${{ steps.setup.outputs.event_alt }}.
