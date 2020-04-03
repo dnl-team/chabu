@@ -38,10 +38,10 @@ jobs:
         message: |
           Ò good job broo 😍
           At [${{ github.repository }}](https://github.com/${{ github.workspace }})
-          On branch `${{ github.head_ref }}`
+          On branch `${{ github.base_ref }}`
           Tested agaist Node.js ${{ matrix.node-version }}
           SHA: `${{ github.sha }}`
-        photo: https://media1.tenor.com/images/346009bde7cab05f69436a21ab22d2d4/tenor.gif?itemid=13263229
+        video: ./res/gifs/love-telegram.gif
 
     - name: send bruh message
       if: failure()
@@ -53,10 +53,10 @@ jobs:
         message: |
           Bruh what have u doneeee?
           At [${{ github.repository }}](https://github.com/${{ github.workspace }})
-          On branch `${{ github.head_ref }}`
+          On branch `${{ github.base_ref }}`
           Tested agaist Node.js ${{ matrix.node-version }}
           SHA: `${{ github.sha }}`
-        photo: https://media1.tenor.com/images/c7235719f555f9b060755e62d74ae412/tenor.gif?itemid=13238517
+        video: ./res/gifs/bruh-telegram.gif
 
       env:
         CI: true
