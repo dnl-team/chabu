@@ -36,7 +36,7 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         format: markdown
         message: |
-          *** PR SUCCESS
+          PR SUCCESS
           ✅✅✅ Ò good job broo 😍
           On branch/commit `${{ github.ref }}` by ${{ github.actor }}
         # document: ./res/gifs/love-telegram.gif
@@ -49,7 +49,7 @@ jobs:
         token: ${{ secrets.TELEGRAM_TOKEN }}
         format: markdown
         message: |
-          *** PR FLOPPED
+          PR FLOPPED
           ❗️❗️❗️ Bruh what have u doneeee?
           On branch/commit `${{ github.ref }}` by ${{ github.actor }}
         # document: ./res/gifs/bruh-telegram.gif
