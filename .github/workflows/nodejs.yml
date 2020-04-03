@@ -42,7 +42,7 @@ jobs:
         photo: https://tenor.com/view/camlansuc-cls-kisses-flying-kiss-smile-gif-13263229
 
     - name: send bruh message
-      if: failed()
+      if: failure()
       uses: appleboy/telegram-action@master
       with:
         to: ${{ secrets.TELEGRAM_TO }}
