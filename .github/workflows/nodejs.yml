@@ -84,10 +84,7 @@ jobs:
           *** PR SUCCESS
           ✅✅✅ Ò good job broo 😍
           On branch/commit `${{ github.ref }}` by ${{ github.actor }}
-          Tested against Node.js ${{ matrix.node-version }}
-          SHA: `${{ steps.setup.outputs.event_sha }}`
-          Check here for more [detail](${{ steps.setup.outputs.event_url }})
-        document: ./res/gifs/love-telegram.gif
+        # document: ./res/gifs/love-telegram.gif
 
     - name: Notify on PR failure
       uses: appleboy/telegram-action@master
@@ -100,10 +97,7 @@ jobs:
           *** PR FLOPPED
           ❗️❗️❗️ Bruh what have u doneeee?
           On branch/commit `${{ github.ref }}` by ${{ github.actor }}
-          SHA: `${{ steps.setup.outputs.event_sha }}`
-          Tested against Node.js ${{ matrix.node-version }}
-          Check here for more [detail](${{ steps.setup.outputs.event_url }})
-        document: ./res/gifs/bruh-telegram.gif
+        # document: ./res/gifs/bruh-telegram.gif
       
     env:
       CI: true
