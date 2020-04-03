@@ -11,7 +11,6 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
@@ -27,7 +26,13 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
+    env:
+      CI: true
 
+  release:
+    if: ${{ github.ref == 'master' }}
+    needs: build
+    steps:
     - name: send love message
       if: success()
       uses: appleboy/telegram-action@master
@@ -38,11 +43,10 @@ jobs:
         message: |
           Ò good job broo 😍
           At [${{ github.repository }}](https://github.com/${{ github.repository }})
-          On branch `${{ github.ref }}`
+          On branch `${{ github.ref }}` by ${{ github.actor }}
           Tested agaist Node.js ${{ matrix.node-version }}
           SHA: `${{ github.sha }}`
         document: ./res/gifs/love-telegram.gif
-
     - name: send bruh message
       if: failure()
       uses: appleboy/telegram-action@master
@@ -53,10 +57,7 @@ jobs:
         message: |
           Bruh what have u doneeee?
           At [${{ github.repository }}](https://github.com/${{ github.repository }})
-          On branch `${{ github.ref }}`
+          On branch `${{ github.ref }}` by ${{ github.actor }}
           Tested agaist Node.js ${{ matrix.node-version }}
           SHA: `${{ github.sha }}`
         document: ./res/gifs/bruh-telegram.gif
-
-      env:
-        CI: true
