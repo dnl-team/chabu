@@ -37,8 +37,8 @@ jobs:
         format: markdown
         message: |
           Ò good job broo 😍
-          At [${{ github.repository }}](https://github.com/${{ github.workspace }})
-          On branch `${{ github.base_ref }}`
+          At [${{ github.repository }}](https://github.com/${{ github.repository }})
+          On branch `${{ github.ref }}`
           Tested agaist Node.js ${{ matrix.node-version }}
           SHA: `${{ github.sha }}`
         video: ./res/gifs/love-telegram.gif
@@ -52,8 +52,8 @@ jobs:
         format: markdown
         message: |
           Bruh what have u doneeee?
-          At [${{ github.repository }}](https://github.com/${{ github.workspace }})
-          On branch `${{ github.base_ref }}`
+          At [${{ github.repository }}](https://github.com/${{ github.repository }})
+          On branch `${{ github.ref }}`
           Tested agaist Node.js ${{ matrix.node-version }}
           SHA: `${{ github.sha }}`
         video: ./res/gifs/bruh-telegram.gif
