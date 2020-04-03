@@ -29,9 +29,9 @@ jobs:
     env:
       CI: true
 
-  release:
+  shutdown:
     runs-on: ubuntu-latest
-    if: ${{ github.ref == 'master' }}
+    # if: ${{ github.ref == 'master' }}
     needs: build
     steps:
     - name: send love message
