@@ -30,6 +30,7 @@ jobs:
       CI: true
 
   release:
+    runs-on: ubuntu-latest
     if: ${{ github.ref == 'master' }}
     needs: build
     steps:
