@@ -46,6 +46,8 @@ jobs:
           && event_url="$base_url/pr/$event_number"
         ! [[ event_url ]] && event_url="$base_url/issues/$event_number"
 
+        event_sha=${${{ github.sha }}:0:7}
+
         event_title="${{ github.event.issue.title }}"
         case "${{ github.event.issue.title }}" in
           "") event_title="${{ github.event.pull_request.title }}" ;;
@@ -56,6 +58,7 @@ jobs:
           name=event_alt::$event_alt \
           name=event_match::$event_match \
           name=event_number::$event_number \
+          name=event_sha::$event_sha \
           name=event_url::$issue_url \
           name=event_title::$event_title 
 
@@ -95,7 +98,7 @@ jobs:
           *** PR #${{ steps.setup.outputs.event_number }} SUCCESS
           ✅✅✅ Ò good job broo 😍
           On branch `${{ github.ref }}` by ${{ github.actor }}
-          SHA: `${{ github.sha.substr(0, 7) }}`
+          SHA: `${{ steps.setup.outputs.event_sha }}`
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/love-telegram.gif
 
@@ -110,6 +113,6 @@ jobs:
           *** PR #${{ steps.setup.outputs.event_number }} FLOPPED
           ❗️❗️❗️ Bruh what have u doneeee?
           On branch `${{ github.ref }}` by ${{ github.actor }}
-          SHA: `${{ github.sha.substr(0, 7) }}`
+          SHA: `${{ steps.setup.outputs.event_sha }}`
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/bruh-telegram.gif
