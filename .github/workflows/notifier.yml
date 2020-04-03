@@ -41,10 +41,8 @@ jobs:
 
         base_url="https://github.com/${{ github.repository }}"
         event_number=$(echo ${{ github.ref }} | sed 's,.*/\([0-9]*\)/.*,\1,')
-        ! [[ $pr =~ '^[0-9]+$']] \
-          && event_number=${{ github.event.issue.number }} \
-          && event_url="$base_url/pr/$event_number"
-        ! [[ event_url ]] && event_url="$base_url/issues/$event_number"
+        ! [[ $event_number =~ '^[0-9]+$']] && event_number=${{ github.event.issue.number }} && event_url="$base_url/pr/$event_number"
+        ! [[ $event_url ]] && event_url="$base_url/issues/$event_number"
 
         event_sha=${${{ github.sha }}:0:7}
 
