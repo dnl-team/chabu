@@ -31,9 +31,10 @@ jobs:
 
   shutdown:
     runs-on: ubuntu-latest
-    # if: ${{ github.ref == 'master' }}
+    if: ${{ github.ref == 'master' }}
     needs: build
     steps:
+    - uses: actions/checkout@v2
     - name: send love message
       if: success()
       uses: appleboy/telegram-action@master
