@@ -14,7 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: [10.x, 12.x]
+        node-version: [ 12.x ]
 
     steps:
     - uses: actions/checkout@v2
@@ -27,9 +27,8 @@ jobs:
     - run: npm test
     
     - name: Setup
-      continue-on-error: true
       id: setup
-      if: always() && ${{ matrix.node-version != '10.x' }}
+      if: always() 
       run: |
         event="UNSPECIFIED"
         event_alt="unspecified"
@@ -71,7 +70,7 @@ jobs:
 
     - name: Notify on PR/push success
       uses: appleboy/telegram-action@master
-      if: always() && success() && ${{ matrix.node-version != '10.x' }}
+      if: success()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -86,9 +85,8 @@ jobs:
         document: ./res/gifs/love-telegram.gif
 
     - name: Notify on PR/push failure
-      uses: appleboy/telegram-action@master
-      continue-on-error: true
-      if: always() && failure() && ${{ matrix.node-version != '12.x' }}
+      uses: appleboy/telegram-action@masters
+      if: failure()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
