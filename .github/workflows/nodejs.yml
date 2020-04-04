@@ -9,15 +9,19 @@ on:
 
 jobs:
   build:
-    name: Node.js 12.x on ubuntu-latest
+    name: ${{ matrix.node-version }} on ubuntu-latest
     runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [10.x, 12.x]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Use Node.js 12.x
+    - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
       with:
-        node-version: 12.x
+        node-version: ${{ matrix.node-version }}
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
@@ -75,7 +79,7 @@ jobs:
           * PR #${{ steps.setup.outputs.event_number }} SUCCESS *
           ✅✅✅ Ò good job broo 😍
           Name: ${{ steps.setup.outputs.event_title }}
-          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by ${{ github.actor }}
+          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by @${{ github.actor }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/love-telegram.gif
@@ -91,7 +95,7 @@ jobs:
           * PR #${{ steps.setup.outputs.event_number }} FLOPPED *
           ❗️❗️❗️ Bruh what have u doneeee?
           Name: ${{ steps.setup.outputs.event_title }}
-          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by ${{ github.actor }}
+          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by @[${{ github.actor }}]
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Tested against Node.js ${{ matrix.node-version }}
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
