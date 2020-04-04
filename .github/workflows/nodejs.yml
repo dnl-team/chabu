@@ -70,7 +70,7 @@ jobs:
 
     - name: Notify on PR/push success
       uses: appleboy/telegram-action@master
-      if: success()
+      if: contains(matrix.node-version, '10') && success()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -78,8 +78,8 @@ jobs:
         message: |
           * PR #${{ steps.setup.outputs.event_number }} SUCCESS *
           ✅✅✅ Ò good job broo 😍
-          __${{ steps.setup.outputs.event_title }}__
-          On branch/commit [${{ github.ref }}](${{ steps.setup.outputs.event_commit_url }}) by @[${{ github.actor }}]
+          __${{ steps.setup.outputs.event_title }}
+          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by @${{ github.actor }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Tested against Node.js ${{ matrix.node-version }}
           [Go to PR](${{ steps.setup.outputs.event_url }})
@@ -88,7 +88,7 @@ jobs:
 
     - name: Notify on PR/push failure
       uses: appleboy/telegram-action@master
-      if: failure()
+      if: contains(matrix.node-version, '10') && failure()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -96,9 +96,9 @@ jobs:
         message: |
           * PR #${{ steps.setup.outputs.event_number }} FLOPPED *
           ❗️❗️❗️ Bruh what have u doneeee?
-          __${{ steps.setup.outputs.event_title }}__
+          __${{ steps.setup.outputs.event_title }}
 
-          On branch/commit [${{ github.ref }}](${{ steps.setup.outputs.event_commit_url }}) by @[${{ github.actor }}]
+          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by @${{ github.actor }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Tested against Node.js ${{ matrix.node-version }}
           [Go to PR](${{ steps.setup.outputs.event_url }})
