@@ -34,7 +34,7 @@ jobs:
       id: return
       if: always()
       run: |
-        echo ::set-output success::${{ success() }}
+        echo ::set-output name=success::${{ success() }}
     
     env:
       CI: true
