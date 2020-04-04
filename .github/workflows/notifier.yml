@@ -62,7 +62,7 @@ jobs:
 
     - name: Notify on review request
       uses: appleboy/telegram-action@master
-      if: always() && github.event_name == 'review_requested'
+      if: always() && (github.event_name == 'review_requested')
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -75,7 +75,7 @@ jobs:
 
     - name: Notify on assigned
       uses: appleboy/telegram-action@master
-      if: always() && github.event_name == 'assigned'
+      if: always() && (github.event_name == 'assigned')
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
