@@ -45,8 +45,8 @@ jobs:
         esac
 
         base_url="https://github.com/${{ github.repository }}"
-        event_number=$(echo ${{ github.ref }} | sed 's,.*/\([0-9]*\)/.*,\1,')
-        event_commit_url="$base_url/commit/${{ github.sha }}"
+        event_number=${{ github.event.pull_request.number }}
+        event_commit_url="$base_url/commits/${{ github.sha }}"
         ! [[ $event_number ]] \
           && event_number=${{ github.event.issue.number }} \
           && event_url="$base_url/pr/$event_number"
@@ -69,7 +69,7 @@ jobs:
           name=event_title::$event_title"
 
     - name: Notify on PR/push success
-      uses: appleboy/telegram-action@master
+      uses: appleboy/telegram-action@0.0.7
       if: success()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
@@ -78,14 +78,16 @@ jobs:
         message: |
           * PR #${{ steps.setup.outputs.event_number }} SUCCESS *
           ✅✅✅ Ò good job broo 😍
-          Name: ${{ steps.setup.outputs.event_title }}
-          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by @${{ github.actor }}
+          __${{ steps.setup.outputs.event_title }}__
+          On branch/commit [${{ github.ref }}](${{ steps.setup.outputs.event_commit_url }}) by @[${{ github.actor }}]
           SHA: `${{ steps.setup.outputs.event_sha }}`
-          Check here for more [detail](${{ steps.setup.outputs.event_url }})
+          Tested against Node.js ${{ matrix.node-version }}
+          [Go to PR](${{ steps.setup.outputs.event_url }})
+          [Go to Build log](https://github.com/${{ steps.setup.outputs.event_commit_url }}/checks)
         document: ./res/gifs/love-telegram.gif
 
     - name: Notify on PR/push failure
-      uses: appleboy/telegram-action@masters
+      uses: appleboy/telegram-action@0.0.7s
       if: failure()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
@@ -94,11 +96,13 @@ jobs:
         message: |
           * PR #${{ steps.setup.outputs.event_number }} FLOPPED *
           ❗️❗️❗️ Bruh what have u doneeee?
-          Name: ${{ steps.setup.outputs.event_title }}
-          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by @[${{ github.actor }}]
+          __${{ steps.setup.outputs.event_title }}__
+
+          On branch/commit [${{ github.ref }}](${{ steps.setup.outputs.event_commit_url }}) by @[${{ github.actor }}]
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Tested against Node.js ${{ matrix.node-version }}
-          Check here for more [detail](${{ steps.setup.outputs.event_url }})
+          [Go to PR](${{ steps.setup.outputs.event_url }})
+          [Go to Build log](https://github.com/${{ steps.setup.outputs.event_commit_url }}/checks)
         document: ./res/gifs/bruh-telegram.gif
 
     env:
