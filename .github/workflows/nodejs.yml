@@ -88,7 +88,7 @@ jobs:
 
     - name: Notify on PR/push failure
       uses: appleboy/telegram-action@master
-      if: cancelled() && contains(matrix.node-version, '10') && failure()
+      if: always() && contains(matrix.node-version, '10') && failure()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
