@@ -1,7 +1,4 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: CI
 
 on:
   push:
@@ -12,6 +9,7 @@ on:
 
 jobs:
   build:
+    name: ${{ matrix.node-version }} on ubuntu-latest
     runs-on: ubuntu-latest
 
     strategy:
@@ -19,8 +17,6 @@ jobs:
         node-version: [10.x, 12.x]
 
     steps:
-    - continue-on-error: true
-
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}
       uses: actions/setup-node@v1
@@ -32,19 +28,15 @@ jobs:
 
     - name: Return
       id: return
-      if: always()
-      run: |
-        echo ::set-output name=success::${{ success() }}
+      run: echo ::set-output name=success::${{ success() }}
     
     env:
       CI: true
       
   notify:
-    needs: build
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v2
     - name: Setup
       id: setup
       if: always()
@@ -103,7 +95,7 @@ jobs:
 
     - name: Notify on PR/push failure
       uses: appleboy/telegram-action@master
-      if: !jobs.build.steps.return.outputs.success
+      if: ${{ !jobs.build.steps.return.outputs.success }}
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
