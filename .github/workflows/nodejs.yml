@@ -87,6 +87,7 @@ jobs:
         document: ./res/gifs/love-telegram.gif
 
     - name: Notify on PR/push failure
+      continue-on-error: true
       uses: appleboy/telegram-action@master
       if: always() && contains(matrix.node-version, '10') && failure()
       with:
