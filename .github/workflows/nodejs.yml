@@ -28,6 +28,7 @@ jobs:
     
     - name: Setup
       id: setup
+      if: always() && ${{ matrix.node-version != '12.x' }}
       run: |
         event="UNSPECIFIED"
         event_alt="unspecified"
@@ -69,7 +70,7 @@ jobs:
 
     - name: Notify on PR/push success
       uses: appleboy/telegram-action@master
-      if: success()
+      if: success() && ${{ matrix.node-version != '12.x' }}
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -79,14 +80,13 @@ jobs:
           ✅✅✅ Ò good job broo 😍
           Name: ${{ steps.setup.outputs.event_title }}
           On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by ${{ github.actor }}
-          Tested against Node.js ${{ matrix.node-version }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/love-telegram.gif
 
     - name: Notify on PR/push failure
       uses: appleboy/telegram-action@master
-      if: cancelled()
+      if: failure() && ${{ matrix.node-version != '12.x' }}
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
