@@ -69,7 +69,7 @@ jobs:
           name=event_title::$event_title"
 
     - name: Notify on PR/push success
-      uses: appleboy/telegram-action@0.0.7
+      uses: appleboy/telegram-action@master
       if: success()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
@@ -87,7 +87,7 @@ jobs:
         document: ./res/gifs/love-telegram.gif
 
     - name: Notify on PR/push failure
-      uses: appleboy/telegram-action@0.0.7s
+      uses: appleboy/telegram-action@master
       if: failure()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
