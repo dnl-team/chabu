@@ -28,7 +28,6 @@ jobs:
     
     - name: Setup
       id: setup
-      if: always()
       run: |
         event="UNSPECIFIED"
         event_alt="unspecified"
@@ -59,14 +58,14 @@ jobs:
           "") event_title="${{ github.event.pull_request.title }}" ;;
         esac
 
-        echo ::set-output \
+        echo "::set-output \
           name=event::$event \
           name=event_alt::$event_alt \
           name=event_commit_url::$event_commit_url \
           name=event_number::$event_number \
           name=event_sha::$event_sha \
           name=event_url::$issue_url \
-          name=event_title::$event_title 
+          name=event_title::$event_title"
 
     - name: Notify on PR/push success
       uses: appleboy/telegram-action@master
@@ -87,7 +86,7 @@ jobs:
 
     - name: Notify on PR/push failure
       uses: appleboy/telegram-action@master
-      if: failure()
+      if: cancelled()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
