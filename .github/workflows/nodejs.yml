@@ -25,18 +25,7 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-
-    - name: Return
-      id: return
-      run: echo ::set-output name=success::${{ success() }}
     
-    env:
-      CI: true
-      
-  notify:
-    runs-on: ubuntu-latest
-
-    steps:
     - name: Setup
       id: setup
       if: always()
@@ -79,7 +68,7 @@ jobs:
 
     - name: Notify on PR/push success
       uses: appleboy/telegram-action@master
-      if: jobs.build.steps.return.outputs.success
+      if: success()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -95,7 +84,7 @@ jobs:
 
     - name: Notify on PR/push failure
       uses: appleboy/telegram-action@master
-      if: ${{ !jobs.build.steps.return.outputs.success }}
+      if: failure()
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -108,3 +97,6 @@ jobs:
           Tested against Node.js ${{ matrix.node-version }}
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
         document: ./res/gifs/bruh-telegram.gif
+
+    env:
+      CI: true
