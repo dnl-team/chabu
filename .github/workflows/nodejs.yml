@@ -28,7 +28,7 @@ jobs:
     
     - name: Setup
       id: setup
-      if: always() && ${{ matrix.node-version != '12.x' }}
+      if: always() && ${{ matrix.node-version != '10.x' }}
       run: |
         event="UNSPECIFIED"
         event_alt="unspecified"
@@ -70,7 +70,7 @@ jobs:
 
     - name: Notify on PR/push success
       uses: appleboy/telegram-action@master
-      if: success() && ${{ matrix.node-version != '12.x' }}
+      if: always() && success() && ${{ matrix.node-version != '10.x' }}
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
@@ -86,7 +86,7 @@ jobs:
 
     - name: Notify on PR/push failure
       uses: appleboy/telegram-action@master
-      if: failure() && ${{ matrix.node-version != '12.x' }}
+      if: always() && failure() && ${{ matrix.node-version != '12.x' }}
       with:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
