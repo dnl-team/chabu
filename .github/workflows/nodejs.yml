@@ -45,7 +45,8 @@ jobs:
         esac
 
         base_url="https://github.com/${{ github.repository }}"
-        event_number=$(echo ${{ github.ref }} | sed -n 's,.*/\([0-9]*\)/.*,\1,')
+        event_number=$(echo ${{ github.ref }} | sed 's,.*/\([0-9]*\)/.*,\1,')
+        event_commit_url="$base_url/commit/${{ github.sha }}"
         ! [[ $event_number ]] \
           && event_number=${{ github.event.issue.number }} \
           && event_url="$base_url/pr/$event_number"
@@ -61,6 +62,7 @@ jobs:
         echo ::set-output \
           name=event::$event \
           name=event_alt::$event_alt \
+          name=event_commit_url::$event_commit_url \
           name=event_number::$event_number \
           name=event_sha::$event_sha \
           name=event_url::$issue_url \
@@ -76,7 +78,8 @@ jobs:
         message: |
           * PR #${{ steps.setup.outputs.event_number }} SUCCESS *
           ✅✅✅ Ò good job broo 😍
-          On branch/commit `${{ github.ref }}` by ${{ github.actor }}
+          Name: ${{ steps.setup.outputs.event_title }}
+          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by ${{ github.actor }}
           Tested against Node.js ${{ matrix.node-version }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
@@ -92,7 +95,8 @@ jobs:
         message: |
           * PR #${{ steps.setup.outputs.event_number }} FLOPPED *
           ❗️❗️❗️ Bruh what have u doneeee?
-          On branch/commit `${{ github.ref }}` by ${{ github.actor }}
+          Name: ${{ steps.setup.outputs.event_title }}
+          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by ${{ github.actor }}
           SHA: `${{ steps.setup.outputs.event_sha }}`
           Tested against Node.js ${{ matrix.node-version }}
           Check here for more [detail](${{ steps.setup.outputs.event_url }})
