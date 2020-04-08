@@ -1,16 +1,15 @@
-# This workflow will do a clean install of node dependencies, build the source code and run tests across different versions of node
-# For more information see: https://help.github.com/actions/language-and-framework-guides/using-nodejs-with-github-actions
-
-name: Node.js CI
+name: CI
 
 on:
   push:
     branches: [ master ]
   pull_request:
     branches: [ master ]
+    types: [ opened ]
 
 jobs:
   build:
+    name: ${{ matrix.node-version }} on ubuntu-latest
     runs-on: ubuntu-latest
 
     strategy:
@@ -26,6 +25,86 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm test
-      
+    
+    - name: Setup
+      id: setup
+      if: always() 
+      run: |
+        event="UNSPECIFIED"
+        event_alt="unspecified"
+
+        case "${{ github.event }}" in
+          "pull_request") 
+            event="PR"
+            event_alt="PR"
+            ;;
+          "issues") 
+            event="ISSUE" 
+            event_alt="issue"
+            ;;
+        esac
+
+        base_url="https://github.com/${{ github.repository }}"
+        event_number=${{ github.event.pull_request.number }}
+        event_commit_url="$base_url/commits/${{ github.sha }}"
+        ! [[ $event_number ]] \
+          && event_number=${{ github.event.issue.number }} \
+          && event_url="$base_url/pr/$event_number"
+        ! [[ $event_url ]] && event_url="$base_url/issues/$event_number"
+
+        event_sha=$(echo ${{ github.sha }} | cut -c 1-8)
+
+        event_title="${{ github.event.issue.title }}"
+        case "${{ github.event.issue.title }}" in
+          "") event_title="${{ github.event.pull_request.title }}" ;;
+        esac
+
+        echo "::set-output \
+          name=event::$event \
+          name=event_alt::$event_alt \
+          name=event_commit_url::$event_commit_url \
+          name=event_number::$event_number \
+          name=event_sha::$event_sha \
+          name=event_url::$issue_url \
+          name=event_title::$event_title"
+
+    - name: Notify on PR/push success
+      uses: appleboy/telegram-action@master
+      if: contains(matrix.node-version, '10') && success()
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |
+          * PR #${{ steps.setup.outputs.event_number }} SUCCESS *
+          ✅✅✅ Ò good job broo 😍
+          __${{ steps.setup.outputs.event_title }}
+          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by @${{ github.actor }}
+          SHA: `${{ steps.setup.outputs.event_sha }}`
+          Tested against Node.js ${{ matrix.node-version }}
+          [Go to PR](${{ steps.setup.outputs.event_url }})
+          [Go to Build log](https://github.com/${{ steps.setup.outputs.event_commit_url }}/checks)
+        document: ./res/gifs/love-telegram.gif
+
+    - name: Notify on PR/push failure
+      continue-on-error: true
+      uses: appleboy/telegram-action@master
+      if: always() && contains(matrix.node-version, '10') && failure()
+      with:
+        to: ${{ secrets.TELEGRAM_TO }}
+        token: ${{ secrets.TELEGRAM_TOKEN }}
+        format: markdown
+        message: |
+          * PR #${{ steps.setup.outputs.event_number }} FLOPPED *
+          ❗️❗️❗️ Bruh what have u doneeee?
+          __${{ steps.setup.outputs.event_title }}
+
+          On branch/commit [`${{ github.ref }}`](${{ steps.setup.outputs.event_commit_url }}) by @${{ github.actor }}
+          SHA: `${{ steps.setup.outputs.event_sha }}`
+          Tested against Node.js ${{ matrix.node-version }}
+          [Go to PR](${{ steps.setup.outputs.event_url }})
+          [Go to Build log](https://github.com/${{ steps.setup.outputs.event_commit_url }}/checks)
+        document: ./res/gifs/bruh-telegram.gif
+
     env:
       CI: true
