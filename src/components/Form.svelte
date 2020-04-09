@@ -152,13 +152,13 @@
     font-weight: 900;
     padding: 12px 8px;
     border-radius: 8px;
-    color: #c0392b;
-    background: #ecf0f1;
+    color: #fff;
+    background: red;
     text-align: center;
     position: absolute;
-    width: 200px;
-    top: 100%;
-    left: 25%;
+    width: 100%;
+    top: 140%;
+    left: 0%;
     border: none;
     z-index: 999;
   }
