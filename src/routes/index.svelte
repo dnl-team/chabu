@@ -81,6 +81,11 @@
     .signup-btn {
         color: #3498db;
         border: 1px solid #3498db;
+        transition: .3s ease;
+    }
+    .signup-btn:hover {
+        color: #fff;
+        background: #3498db;
     }
     .learnmore-btn {
         border: none;

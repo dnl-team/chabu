@@ -59,13 +59,14 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    margin-top: 52px;
+    margin-top:62px;
     width: 50vw;
     width: 22rem;
     background: #fff;
     padding: 10px 42px;
     border-radius: 18px;
     color: #444;
+    box-shadow: 0 2px 20px 0 #787878;
   }
   h1 {
     text-align: center;

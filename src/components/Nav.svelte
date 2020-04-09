@@ -53,6 +53,7 @@
 		align-items: center;
 		position: fixed;
 		font-family: Roboto;
+		background: #fff;
 	}
 	.nav__logo {
 		margin-left: 32px;
