@@ -1,7 +1,15 @@
+<script>
+</script>
+<style>
+  h1 {
+    font-size: 10rem;
+    text-align: center;
+    line-height: 100vh;
+  }
+</style>
+
 <svelte:head>
-	<title>About</title>
+  <title>About</title>
 </svelte:head>
 
-<h1>About this site</h1>
-
-<p>This is the 'about' page. There's not much here.</p>
+<h1>About Page</h1>

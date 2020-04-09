@@ -1,6 +1,6 @@
 import { timestamp, files, shell, routes } from '@sapper/service-worker'
 import { Store, set, get } from 'idb-keyval'
-import MD5 from 'crypto-js/md5'
+// import MD5 from 'crypto-js/md5'
 
 const ASSETS = `cache${timestamp}`
 
