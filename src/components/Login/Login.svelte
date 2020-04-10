@@ -1,5 +1,5 @@
 <script>
-  import { signOut } from '../../providers/firebase'
+  import { signOut } from '../../providers/firebase/auth'
   import { authStore } from '../../stores/auth'
   import Profile from '../User/Profile.svelte'
   import SignInButton from './SignInButton.svelte'
