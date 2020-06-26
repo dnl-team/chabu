@@ -16,7 +16,7 @@
     "test": "run-p --race dev cy:run"
   },
   "dependencies": {
-    "@firebase/app": "^0.6.1",
+    "@firebase/app": "^0.6.7",
     "@firebase/auth": "^0.14.2",
     "@polka/redirect": "^1.0.0-next.7",
     "@polka/send": "^1.0.0-next.7",
